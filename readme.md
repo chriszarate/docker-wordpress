@@ -1,7 +1,7 @@
 # WordPress on Docker
 
 This image extends the official WordPress Docker image, adding better defaults,
-WP-CLI, PHPUnit, Composer, and the WordPress unit testing suite.
+WP-CLI, PHPUnit, Composer, Xdebug, and the WordPress unit testing suite.
 
 ```
 docker pull chriszarate/wordpress
@@ -75,15 +75,18 @@ Other environment variables:
 
 ## Xdebug
 
-Xdebug is installed but needs the IP of your local machine to connect to your
-local debugging client. Provide it via the `DOCKER_LOCAL_IP` environment
-variable. The default `idekey` is `xdebug`.
-
-You can enable profiling by appending instructions to `XDEBUG_CONFIG` in
-`docker-compose.yml`, e.g.:
+Xdebug is installed but needs to be configured with an IDE key and the IP of
+your local machine so that it can connect to your local debugging client.
+Provide it via the `XDEBUG_CONFIG` environment variable, e.g.:
 
 ```
-XDEBUG_CONFIG: "remote_host=${DOCKER_LOCAL_IP} idekey=xdebug profiler_enable=1 profiler_output_name=%R.%t.out"
+XDEBUG_CONFIG: "remote_host=x.x.x.x idekey=xdebug"
+```
+
+You can enable profiling by appending additional instructions, e.g.:
+
+```
+XDEBUG_CONFIG: "remote_host=x.x.x.x idekey=xdebug profiler_enable=1 profiler_output_name=%R.%t.out"
 ```
 
 This will output cachegrind files (named after the request URI and timestamp) to
