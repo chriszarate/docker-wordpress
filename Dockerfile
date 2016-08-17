@@ -1,7 +1,7 @@
 FROM wordpress
 
 RUN apt-get update \
-    && apt-get install -y --force-yes --no-install-recommends less subversion \
+    && apt-get install -y --force-yes --no-install-recommends less \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pecl install xdebug \
@@ -24,10 +24,6 @@ RUN { \
 # Make Zend Opcache stat files on every request instead of every 60s.
 # https://github.com/docker-library/wordpress/pull/103
 RUN sed -i -E 's#(revalidate_freq)=[0-9]+#\1=0#' /usr/local/etc/php/conf.d/opcache-recommended.ini
-
-# Download WordPress test bed.
-RUN svn co --quiet --trust-server-cert --non-interactive https://develop.svn.wordpress.org/trunk /tmp/wordpress/latest \
-    && chown -R www-data:www-data /tmp/wordpress/latest
 
 RUN curl -sSL -o /usr/local/bin/phpunit "https://phar.phpunit.de/phpunit.phar" \
     && chmod +x /usr/local/bin/phpunit
