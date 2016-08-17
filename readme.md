@@ -51,8 +51,7 @@ docker exec wordpress wp [command]
 
 ## Running tests (PHPUnit)
 
-Set `PHPUNIT_TEST_DIR` to the path containing `phpunit.xml`. A configured
-WordPress test suite is available in `/tmp/wordpress/latest/`.
+Set `PHPUNIT_TEST_DIR` to the path containing `phpunit.xml`.
 
 ```sh
 docker exec wordpress tests
@@ -70,7 +69,8 @@ Other environment variables:
 
 - `PHPUNIT_WP_CONTENT_LINKS`: A space-separated list of paths, relative to
   `/var/www/html/wp-content/`, that should be symlinked into the WordPress unit
-  test suite directory so that they are available during testing.
+  test suite directory (`/tmp/wordpress/latest/`) so that they are available
+  during testing. Provide the unit test suite directory using a Docker volume.
 
 
 ## Xdebug
