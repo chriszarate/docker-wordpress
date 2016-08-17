@@ -52,11 +52,6 @@ if [ -n "$WORDPRESS_ACTIVATE_THEME" ]; then
   wp theme activate "$WORDPRESS_ACTIVATE_THEME"
 fi
 
-# Flush rewrite rules..
-if ! [ -f /var/www/html/.htaccess ]; then
-  wp rewrite flush
-fi
-
 # Setup PHPUnit.
 if [ -f /tmp/wordpress/latest/wp-tests-config-sample.php ] && [ -n "$PHPUNIT_DB_HOST" ]; then
   sed \

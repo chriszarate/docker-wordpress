@@ -59,6 +59,17 @@ RUN { \
 RUN curl -sSL "https://getcomposer.org/installer" | php \
     && mv composer.phar /usr/local/bin/composer
 
+RUN { \
+      echo '<IfModule mod_rewrite.c>'; \
+      echo '  RewriteEngine On'; \
+      echo '  RewriteBase /'; \
+      echo '  RewriteRule ^index\.php$ - [L]'; \
+      echo '  RewriteCond %{REQUEST_FILENAME} !-f'; \
+      echo '  RewriteCond %{REQUEST_FILENAME} !-d'; \
+      echo '  RewriteRule . /index.php [L]'; \
+      echo '</IfModule>'; \
+    } > /usr/src/wordpress/.htaccess
+
 COPY docker-entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
