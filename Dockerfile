@@ -69,6 +69,8 @@ RUN { \
       echo '</IfModule>'; \
     } > /usr/src/wordpress/.htaccess
 
+RUN echo '<?php /* placeholder */ ?>' > /usr/src/wordpress/wp-content/sunrise.php
+
 COPY docker-entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
