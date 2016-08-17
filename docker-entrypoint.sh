@@ -69,6 +69,10 @@ if [ -f /tmp/wordpress/latest/wp-tests-config-sample.php ] && [ -n "$PHPUNIT_DB_
       ln -s "/var/www/html/wp-content/$link" "/tmp/wordpress/latest/src/wp-content/$link" || echo "Symlink $link already exists."
     fi
   done
+
+  # Create writeable uploads directory.
+  # shellcheck disable=SC2174
+  mkdir -p -m 777 /tmp/wordpress/latest/src/wp-content/uploads
 fi
 
 exec "$@"
