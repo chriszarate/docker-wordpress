@@ -4,6 +4,9 @@ RUN apt-get update \
     && apt-get install -y --force-yes --no-install-recommends less \
     && rm -rf /var/lib/apt/lists/*
 
+RUN pecl install memcache \
+    && docker-php-ext-enable memcache
+
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug \
     && rm -rf /tmp/pear/
