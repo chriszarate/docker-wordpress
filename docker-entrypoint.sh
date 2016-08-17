@@ -69,7 +69,7 @@ if [ -f /tmp/wordpress/latest/wp-tests-config-sample.php ] && [ -n "$PHPUNIT_DB_
   for link in $PHPUNIT_WP_CONTENT_LINKS; do
     if ! [ -d "/tmp/wordpress/latest/src/wp-content/$link" ]; then
       mkdir -p "$(dirname "/tmp/wordpress/latest/src/wp-content/$link")"
-      ln -s "/var/www/html/wp-content/$link" "/tmp/wordpress/latest/src/wp-content/$link"
+      ln -s "/var/www/html/wp-content/$link" "/tmp/wordpress/latest/src/wp-content/$link" || echo "Symlink $link already exists."
     fi
   done
 fi
