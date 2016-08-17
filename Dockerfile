@@ -59,3 +59,5 @@ RUN curl -sSL "https://getcomposer.org/installer" | php \
     && mv composer.phar /usr/local/bin/composer
 
 COPY docker-entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
