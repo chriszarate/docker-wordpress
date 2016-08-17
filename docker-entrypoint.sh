@@ -21,6 +21,9 @@ $WORDPRESS_CONFIG_EXTRA
 PHP
 fi
 
+# Update WP-CLI config with current virtual host.
+sed -i -E "s/^url: .*/url: ${VIRTUAL_HOST:-project.dev}/" /etc/wp-cli/config.yml
+
 # MySQL may not be ready when container starts.
 set +ex
 while true; do
@@ -33,7 +36,6 @@ set -ex
 
 # Install WordPress.
 wp core install \
-  --url="'${WORDPRESS_SITE_URL:-http://project.dev}'" \
   --title="'${WORDPRESS_SITE_TITLE:-Project}'" \
   --admin_user="'${WORDPRESS_SITE_USER:-wordpress}'" \
   --admin_password="'${WORDPRESS_SITE_PASSWORD:-wordpress}'" \

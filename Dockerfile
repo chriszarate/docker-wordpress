@@ -45,6 +45,7 @@ RUN mkdir -p /etc/wp-cli
 
 RUN { \
       echo 'path: /var/www/html'; \
+      echo 'url: project.dev'; \
       echo 'apache_modules:'; \
       echo '  - mod_rewrite'; \
     } > /etc/wp-cli/config.yml
