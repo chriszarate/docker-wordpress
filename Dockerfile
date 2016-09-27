@@ -1,11 +1,9 @@
-FROM wordpress
+FROM php:7-apache
 
 RUN apt-get update \
-    && apt-get install -y --force-yes --no-install-recommends less \
+    && apt-get install -y --force-yes --no-install-recommends less libxml2-dev \
+    && docker-php-ext-install mysqli opcache soap \
     && rm -rf /var/lib/apt/lists/*
-
-RUN pecl install memcache \
-    && docker-php-ext-enable memcache
 
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug \
@@ -26,7 +24,28 @@ RUN { \
 
 # Make Zend Opcache stat files on every request instead of every 60s.
 # https://github.com/docker-library/wordpress/pull/103
-RUN sed -i -E 's#(revalidate_freq)=[0-9]+#\1=0#' /usr/local/etc/php/conf.d/opcache-recommended.ini
+RUN { \
+      echo 'opcache.memory_consumption=128'; \
+      echo 'opcache.interned_strings_buffer=8'; \
+      echo 'opcache.max_accelerated_files=4000'; \
+      echo 'opcache.revalidate_freq=0'; \
+      echo 'opcache.fast_shutdown=1'; \
+      echo 'opcache.enable_cli=1'; \
+    } > /usr/local/etc/php/conf.d/opcache-recommended.ini
+
+RUN a2enmod rewrite
+
+VOLUME /var/www/html
+
+ENV WORDPRESS_VERSION 4.6.1
+ENV WORDPRESS_SHA1 027e065d30a64720624a7404a1820e6c6fff1202
+
+# Download WordPress.
+RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz \
+    && echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c - \
+    && tar -xzf wordpress.tar.gz -C /usr/src/ \
+    && rm wordpress.tar.gz \
+    && chown -R www-data:www-data /usr/src/wordpress
 
 RUN curl -sSL -o /usr/local/bin/phpunit "https://phar.phpunit.de/phpunit.phar" \
     && chmod +x /usr/local/bin/phpunit
@@ -71,4 +90,6 @@ RUN { \
 
 COPY docker-entrypoint.sh /entrypoint.sh
 
-RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["apache2-foreground"]

@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 set -ex
 
@@ -20,9 +20,6 @@ if ! [ -f /var/www/html/wp-config.php ]; then
 $WORDPRESS_CONFIG_EXTRA
 PHP
 fi
-
-# Update WP-CLI config with current virtual host.
-sed -i -E "s/^url: .*/url: ${VIRTUAL_HOST:-project.dev}/" /etc/wp-cli/config.yml
 
 # MySQL may not be ready when container starts.
 set +ex
@@ -52,11 +49,14 @@ if [ -n "$WORDPRESS_ACTIVATE_THEME" ]; then
   wp theme activate "$WORDPRESS_ACTIVATE_THEME"
 fi
 
+# Update WP-CLI config with current virtual host.
+sed -i -E "s/^url: .*/url: ${VIRTUAL_HOST:-project.dev}/" /etc/wp-cli/config.yml
+
 # Setup PHPUnit.
-if [ -f /tmp/wordpress/latest/wp-tests-config-sample.php ] && [ -n "$PHPUNIT_DB_HOST" ]; then
+if [ -f /tmp/wordpress/latest/wp-tests-config-sample.php ]; then
   sed \
     -e "s/.*ABSPATH.*/define( 'ABSPATH', getenv('WP_ABSPATH') );/" \
-    -e "s/.*DB_HOST.*/define( 'DB_HOST', '${PHPUNIT_DB_HOST:-localhost}' );/" \
+    -e "s/.*DB_HOST.*/define( 'DB_HOST', '${PHPUNIT_DB_HOST:-mysql_phpunit}' );/" \
     -e "s/.*DB_NAME.*/define( 'DB_NAME', '${PHPUNIT_DB_NAME:-wordpress_phpunit}' );/" \
     -e "s/.*DB_USER.*/define( 'DB_USER', '${PHPUNIT_DB_USER:-root}' );/" \
     -e "s/.*DB_PASSWORD.*/define( 'DB_PASSWORD', '$PHPUNIT_DB_PASSWORD' );/" \
