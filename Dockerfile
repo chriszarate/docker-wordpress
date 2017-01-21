@@ -37,8 +37,8 @@ RUN a2enmod rewrite
 
 VOLUME /var/www/html
 
-ENV WORDPRESS_VERSION 4.6.1
-ENV WORDPRESS_SHA1 027e065d30a64720624a7404a1820e6c6fff1202
+ENV WORDPRESS_VERSION 4.7.1
+ENV WORDPRESS_SHA1 8e56ba56c10a3f245c616b13e46bd996f63793d6
 
 # Download WordPress.
 RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz \
