@@ -92,3 +92,10 @@ XDEBUG_CONFIG: "remote_host=x.x.x.x idekey=xdebug profiler_enable=1 profiler_out
 
 This will output cachegrind files (named after the request URI and timestamp) to
 `/tmp` inside the WordPress container.
+
+
+## Seed `wp-content`
+
+You can seed `wp-content` with files (e.g., an uploads folder) by mounting a
+volume at `/tmp/wordpress/init-wp-content`. Everything in that folder will be
+copied to your installation's `wp-content` folder.
