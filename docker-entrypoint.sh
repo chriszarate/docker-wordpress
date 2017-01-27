@@ -27,6 +27,9 @@ $WORDPRESS_CONFIG_EXTRA
 PHP
 fi
 
+# Update WP-CLI config with current virtual host.
+sed -i -E "s/^url: .*/url: ${VIRTUAL_HOST:-project.dev}/" /etc/wp-cli/config.yml
+
 # MySQL may not be ready when container starts.
 set +ex
 while true; do
@@ -54,9 +57,6 @@ fi
 if [ -n "$WORDPRESS_ACTIVATE_THEME" ]; then
   wp theme activate "$WORDPRESS_ACTIVATE_THEME"
 fi
-
-# Update WP-CLI config with current virtual host.
-sed -i -E "s/^url: .*/url: ${VIRTUAL_HOST:-project.dev}/" /etc/wp-cli/config.yml
 
 # Setup PHPUnit.
 if [ -f /tmp/wordpress/latest/wp-tests-config-sample.php ]; then

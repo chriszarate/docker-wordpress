@@ -47,6 +47,12 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
     && rm wordpress.tar.gz \
     && chown -R www-data:www-data /usr/src/wordpress
 
+# Download WordPress testing suite.
+RUN curl -o wordpress-dev.tar.gz -SL https://github.com/WordPress/wordpress-develop/tarball/master \
+    && mkdir -p /tmp/wordpress/latest \
+    && tar -xzf wordpress-dev.tar.gz  --strip-components 1 -C /tmp/wordpress/latest \
+    && rm wordpress-dev.tar.gz
+
 RUN curl -sSL -o /usr/local/bin/phpunit "https://phar.phpunit.de/phpunit.phar" \
     && chmod +x /usr/local/bin/phpunit
 
