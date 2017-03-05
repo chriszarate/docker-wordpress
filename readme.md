@@ -1,4 +1,4 @@
-# WordPress on Docker
+# WordPress development on Docker
 
 This image provides WordPress on PHP7. It generally follows the approach of the
 official WordPress Docker image and adds better defaults, WP-CLI, PHPUnit,
@@ -8,9 +8,10 @@ Composer, Xdebug, and the WordPress unit testing suite.
 docker pull chriszarate/wordpress
 ```
 
-Connect this image with a MySQL / MariaDB image or use my suggested
-[Docker Compose](https://github.com/chriszarate/docker-wordpress-vip)
-development setup.
+Most likely, you will want to connect this image to a MySQL / MariaDB container
+and sync your plugin or theme code to it so that you can connect to a
+development instance of WordPress in a browser. If that's the case, I can
+recommend my [Docker Compose WordPress development][development] repo.
 
 
 ## Environment variables
@@ -30,7 +31,7 @@ development setup.
 
 - `WORDPRESS_DB_USER`: Default "root".
 
-- `WORDPRESS_DB_PASSWORD`: Default "wordpress".
+- `WORDPRESS_DB_PASSWORD`: Default "".
 
 - `WORDPRESS_SITE_USER`: Default "wordpress"
 
@@ -70,15 +71,15 @@ Other environment variables:
 
 - `PHPUNIT_WP_CONTENT_LINKS`: A space-separated list of paths, relative to
   `/var/www/html/wp-content/`, that should be symlinked into the WordPress unit
-  test suite directory (`/tmp/wordpress/latest/`) so that they are available
-  during testing. Provide the unit test suite directory using a Docker volume.
+  test suite directory so that they are available during testing.
 
 
 ## Xdebug
 
-Xdebug is installed but needs to be configured with an IDE key and the IP of
-your local machine so that it can connect to your local debugging client.
-Provide it via the `XDEBUG_CONFIG` environment variable, e.g.:
+Xdebug is installed but needs the IP of your local machine to connect to your
+local debugging client. Edit `.env` and populate the `DOCKER_LOCAL_IP`
+environment variable with your machine's (local network) IP address. The default
+`idekey` is `xdebug`.
 
 ```
 XDEBUG_CONFIG: "remote_host=x.x.x.x idekey=xdebug"
@@ -99,3 +100,6 @@ This will output cachegrind files (named after the request URI and timestamp) to
 You can seed `wp-content` with files (e.g., an uploads folder) by mounting a
 volume at `/tmp/wordpress/init-wp-content`. Everything in that folder will be
 copied to your installation's `wp-content` folder.
+
+
+[development]: https://github.com/chriszarate/docker-compose-wordpress
