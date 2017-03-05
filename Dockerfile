@@ -53,7 +53,7 @@ RUN curl -o wordpress-dev.tar.gz -SL https://github.com/WordPress/wordpress-deve
     && tar -xzf wordpress-dev.tar.gz  --strip-components 1 -C /tmp/wordpress/latest \
     && rm wordpress-dev.tar.gz
 
-RUN curl -sSL -o /usr/local/bin/phpunit "https://phar.phpunit.de/phpunit.phar" \
+RUN curl -sSL -o /usr/local/bin/phpunit "https://phar.phpunit.de/phpunit-5.0.phar" \
     && chmod +x /usr/local/bin/phpunit
 
 RUN { \
