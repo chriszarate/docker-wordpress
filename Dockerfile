@@ -58,7 +58,7 @@ RUN curl -sSL -o /usr/local/bin/phpunit "https://phar.phpunit.de/phpunit.phar" \
 
 RUN { \
       echo '#!/usr/bin/env sh'; \
-      echo 'runuser -l www-data -s /bin/sh -c "cd $PHPUNIT_TEST_DIR; /usr/local/bin/phpunit $*"'; \
+      echo 'runuser -l www-data -s /bin/sh -c "cd $PHPUNIT_TEST_DIR; WP_ABSPATH=/tmp/wordpress/latest/src/ WP_TESTS_DIR=/tmp/wordpress/latest/tests/phpunit /usr/local/bin/phpunit $*"'; \
     } > /usr/local/bin/tests \
     && chmod +x /usr/local/bin/tests
 
