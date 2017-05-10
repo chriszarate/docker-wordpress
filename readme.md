@@ -46,17 +46,20 @@ recommend my [Docker Compose WordPress development][development] repo.
 
 ## WP-CLI
 
+Assuming you are running in the context of Docker Compose:
+
 ```sh
-docker exec wordpress wp [command]
+docker-compose exec --user www-data wordpress wp [command]
 ```
 
 
 ## Running tests (PHPUnit)
 
-Set `PHPUNIT_TEST_DIR` to the path containing `phpunit.xml`.
+Set `PHPUNIT_TEST_DIR` to the path containing `phpunit.xml` (again assuming you
+are running in the context of Docker Compose):
 
 ```sh
-docker exec wordpress tests
+docker-compose exec wordpress tests
 ```
 
 Other environment variables:

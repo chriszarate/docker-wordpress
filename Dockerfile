@@ -62,10 +62,11 @@ RUN { \
     } > /usr/local/bin/tests \
     && chmod +x /usr/local/bin/tests
 
-RUN curl -sSL -o /usr/local/bin/wp-cli "https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar" \
-    && chmod +x /usr/local/bin/wp-cli
+RUN curl -sSL -o /usr/local/bin/wp "https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar" \
+    && chmod +x /usr/local/bin/wp
 
-RUN mkdir -p /etc/wp-cli
+RUN mkdir -p /etc/wp-cli && \
+    chown www-data:www-data /etc/wp-cli
 
 RUN { \
       echo 'path: /var/www/html'; \
@@ -74,11 +75,7 @@ RUN { \
       echo '  - mod_rewrite'; \
     } > /etc/wp-cli/config.yml
 
-RUN { \
-      echo '#!/usr/bin/env sh'; \
-      echo 'runuser -l www-data -s /bin/sh -c "WP_CLI_CONFIG_PATH=/etc/wp-cli/config.yml /usr/local/bin/wp-cli $*"'; \
-    } > /usr/local/bin/wp \
-    && chmod +x /usr/local/bin/wp
+RUN echo "export WP_CLI_CONFIG_PATH=/etc/wp-cli/config.yml" > /etc/profile.d/wp-cli.sh
 
 RUN curl -sSL "https://getcomposer.org/installer" | php \
     && mv composer.phar /usr/local/bin/composer
