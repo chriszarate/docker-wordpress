@@ -41,7 +41,7 @@ done
 set -ex
 
 # Install WordPress.
-wp core install \
+wp core "$([ "$WORDPRESS_INSTALL_TYPE" == "multisite" ] && echo "multisite-install" || echo "install")" \
   --title="${WORDPRESS_SITE_TITLE:-Project}" \
   --admin_user="${WORDPRESS_SITE_USER:-wordpress}" \
   --admin_password="${WORDPRESS_SITE_PASSWORD:-wordpress}" \

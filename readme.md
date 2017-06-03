@@ -35,6 +35,8 @@ instance of WordPress in a browser. If that's the case, I can recommend my
 
 - `WORDPRESS_DB_PASSWORD`: Default "".
 
+- `WORDPRESS_INSTALL_TYPE`: Default "single" (use "multisite" for Multisite install).
+
 - `WORDPRESS_PERMALINK_STRUCTURE`: Default "/%year%/%monthnum%/%postname%/"
 
 - `WORDPRESS_SITE_USER`: Default "wordpress"
