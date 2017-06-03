@@ -50,6 +50,9 @@ wp core install \
   --allow-root \
   --skip-email
 
+# Update rewrite structure.
+wp --allow-root option update permalink_structure "${WORDPRESS_PERMALINK_STRUCTURE:-/%year%/%monthnum%/%postname%/}" --skip-themes --skip-plugins
+
 # Activate plugins.
 if [ -n "$WORDPRESS_ACTIVATE_PLUGINS" ]; then
   wp --allow-root plugin activate "$WORDPRESS_ACTIVATE_PLUGINS"

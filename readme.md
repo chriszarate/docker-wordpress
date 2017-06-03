@@ -33,6 +33,8 @@ instance of WordPress in a browser. If that's the case, I can recommend my
 
 - `WORDPRESS_DB_PASSWORD`: Default "".
 
+- `WORDPRESS_PERMALINK_STRUCTURE`: Default "/%year%/%monthnum%/%postname%/"
+
 - `WORDPRESS_SITE_USER`: Default "wordpress"
 
 - `WORDPRESS_SITE_PASSWORD`: Default "wordpress"
