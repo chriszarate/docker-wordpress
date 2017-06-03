@@ -1,8 +1,8 @@
-FROM php:7.0-apache
+FROM wordpress:4.7.5-php7.0-apache
 
 RUN apt-get update \
     && apt-get install -y --force-yes --no-install-recommends less libxml2-dev \
-    && docker-php-ext-install mysqli opcache soap \
+    && docker-php-ext-install soap \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pecl install xdebug \
@@ -15,37 +15,9 @@ RUN { \
       echo 'xdebug.remote_port="9000"'; \
     } >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
-# Enable error reporting.
-# https://github.com/docker-library/php/issues/153
-RUN { \
-      echo 'error_reporting=E_ALL'; \
-      echo 'log_errors=On'; \
-    } > /usr/local/etc/php/conf.d/errors.ini
-
-# Make Zend Opcache stat files on every request instead of every 60s.
-# https://github.com/docker-library/wordpress/pull/103
-RUN { \
-      echo 'opcache.memory_consumption=128'; \
-      echo 'opcache.interned_strings_buffer=8'; \
-      echo 'opcache.max_accelerated_files=4000'; \
-      echo 'opcache.revalidate_freq=0'; \
-      echo 'opcache.fast_shutdown=1'; \
-      echo 'opcache.enable_cli=1'; \
-    } > /usr/local/etc/php/conf.d/opcache-recommended.ini
-
-RUN a2enmod rewrite
+RUN a2enmod rewrite expires
 
 VOLUME /var/www/html
-
-ENV WORDPRESS_VERSION 4.7.4
-ENV WORDPRESS_SHA1 153592ccbb838cafa1220de9174ec965df2e9e1a
-
-# Download WordPress.
-RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz \
-    && echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c - \
-    && tar -xzf wordpress.tar.gz -C /usr/src/ \
-    && rm wordpress.tar.gz \
-    && chown -R www-data:www-data /usr/src/wordpress
 
 # Download WordPress testing suite.
 RUN curl -o wordpress-dev.tar.gz -SL https://github.com/WordPress/wordpress-develop/tarball/master \
@@ -91,10 +63,4 @@ RUN { \
       echo '</IfModule>'; \
     } > /usr/src/wordpress/.htaccess
 
-COPY docker-entrypoint.sh /entrypoint.sh
-
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["apache2-foreground"]
+COPY docker-entrypoint.sh /usr/local/bin/
