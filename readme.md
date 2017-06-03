@@ -17,11 +17,13 @@ instance of WordPress in a browser. If that's the case, I can recommend my
 ## Environment variables
 
 - `WORDPRESS_ACTIVATE_PLUGINS`: A space-separated list of plugin paths relative
-  to `/var/www/html/wp-content/wp-content/plugins/` that should be activated
-  when the container starts.
+  to `/var/www/html/wp-content/plugins/` that should be activated when the
+  container starts. If a plugin cannot be found, an install will be attempted
+  via `wp plugin install`.
 
-- `WORDPRESS_ACTIVATE_THEME` A theme path relative to `/var/www/html/wp-content/wp-content/themes/`
-  that should be activated when the container starts.
+- `WORDPRESS_ACTIVATE_THEME` A theme path relative to `/var/www/html/wp-content/themes/`
+  that should be activated when the container starts. If the theme cannot be
+  found, an install will be attempted via `wp theme install`.
 
 - `WORDPRESS_CONFIG_EXTRA`: Additional PHP to append to `wp-config.php`.
 

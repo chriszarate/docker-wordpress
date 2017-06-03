@@ -53,13 +53,25 @@ wp core install \
 # Update rewrite structure.
 wp --allow-root option update permalink_structure "${WORDPRESS_PERMALINK_STRUCTURE:-/%year%/%monthnum%/%postname%/}" --skip-themes --skip-plugins
 
-# Activate plugins.
+# Activate plugins. Install if it cannot be found locally.
 if [ -n "$WORDPRESS_ACTIVATE_PLUGINS" ]; then
+  for plugin in $WORDPRESS_ACTIVATE_PLUGINS; do
+    if ! [ -d "/var/www/html/wp-content/plugins/$plugin" ]; then
+      wp --allow-root plugin install "$plugin"
+      chown -R www-data:www-data "/var/www/html/wp-content/plugins/$plugin"
+    fi
+  done
+
   wp --allow-root plugin activate "$WORDPRESS_ACTIVATE_PLUGINS"
 fi
 
-# Activate theme.
+# Activate theme. Install if it cannot be found locally.
 if [ -n "$WORDPRESS_ACTIVATE_THEME" ]; then
+  if ! [ -d "/var/www/html/wp-content/themes/$WORDPRESS_ACTIVATE_THEME" ]; then
+    wp --allow-root theme install "$WORDPRESS_ACTIVATE_THEME"
+    chown -R www-data:www-data "/var/www/html/wp-content/themes/$WORDPRESS_ACTIVATE_THEME"
+  fi
+
   wp --allow-root theme activate "$WORDPRESS_ACTIVATE_THEME"
 fi
 
