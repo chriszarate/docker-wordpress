@@ -45,7 +45,7 @@ instance of WordPress in a browser. If that's the case, I can recommend my
 
 - `WORDPRESS_SITE_TITLE`: Default "Project".
 
-- `WORDPRESS_SITE_URL`: Default "http://project.dev/".
+- `WORDPRESS_SITE_URL`: Default "http://project.dev".
 
 
 ## WP-CLI

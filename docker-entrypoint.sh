@@ -15,7 +15,7 @@ if [ -d /tmp/wordpress/init-wp-content ]; then
 fi
 
 # Update WP-CLI config with current virtual host.
-sed -i -E "s/^url: .*/url: ${VIRTUAL_HOST:-project.dev}/" /etc/wp-cli/config.yml
+sed -i -E "s#^url: .*#url: ${WORDPRESS_SITE_URL:-http://project.dev}#" /etc/wp-cli/config.yml
 
 # Create WordPress config.
 if ! [ -f /var/www/html/wp-config.php ]; then
@@ -46,7 +46,7 @@ wp core install \
   --admin_user="${WORDPRESS_SITE_USER:-wordpress}" \
   --admin_password="${WORDPRESS_SITE_PASSWORD:-wordpress}" \
   --admin_email="${WORDPRESS_SITE_EMAIL:-admin@example.com}" \
-  --url="${VIRTUAL_HOST:-project.dev}" \
+  --url="${WORDPRESS_SITE_URL:-http://project.dev}" \
   --allow-root \
   --skip-email
 
