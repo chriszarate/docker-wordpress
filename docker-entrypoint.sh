@@ -14,21 +14,22 @@ if [ -d /tmp/wordpress/init-wp-content ]; then
   echo "Seeded wp-content directory from /tmp/wordpress/init-wp-content."
 fi
 
+# Update WP-CLI config with current virtual host.
+sed -i -E "s/^url: .*/url: ${VIRTUAL_HOST:-project.dev}/" /etc/wp-cli/config.yml
+
 # Create WordPress config.
 if ! [ -f /var/www/html/wp-config.php ]; then
-  wp core config \
-    --dbhost="'${WORDPRESS_DB_HOST:-mysql}'" \
-    --dbname="'${WORDPRESS_DB_NAME:-wordpress}'" \
-    --dbuser="'${WORDPRESS_DB_USER:-root}'" \
-    --dbpass="'$WORDPRESS_DB_PASSWORD'" \
+  wp config create \
+    --dbhost="${WORDPRESS_DB_HOST:-mysql}" \
+    --dbname="${WORDPRESS_DB_NAME:-wordpress}" \
+    --dbuser="${WORDPRESS_DB_USER:-root}" \
+    --dbpass="$WORDPRESS_DB_PASSWORD" \
+    --allow-root \
     --skip-check \
     --extra-php <<PHP
 $WORDPRESS_CONFIG_EXTRA
 PHP
 fi
-
-# Update WP-CLI config with current virtual host.
-sed -i -E "s/^url: .*/url: ${VIRTUAL_HOST:-project.dev}/" /etc/wp-cli/config.yml
 
 # MySQL may not be ready when container starts.
 set +ex
@@ -42,20 +43,22 @@ set -ex
 
 # Install WordPress.
 wp core install \
-  --title="'${WORDPRESS_SITE_TITLE:-Project}'" \
-  --admin_user="'${WORDPRESS_SITE_USER:-wordpress}'" \
-  --admin_password="'${WORDPRESS_SITE_PASSWORD:-wordpress}'" \
-  --admin_email="'${WORDPRESS_SITE_EMAIL:-admin@example.com}'" \
+  --title="${WORDPRESS_SITE_TITLE:-Project}" \
+  --admin_user="${WORDPRESS_SITE_USER:-wordpress}" \
+  --admin_password="${WORDPRESS_SITE_PASSWORD:-wordpress}" \
+  --admin_email="${WORDPRESS_SITE_EMAIL:-admin@example.com}" \
+  --url="${VIRTUAL_HOST:-project.dev}" \
+  --allow-root \
   --skip-email
 
 # Activate plugins.
 if [ -n "$WORDPRESS_ACTIVATE_PLUGINS" ]; then
-  wp plugin activate "$WORDPRESS_ACTIVATE_PLUGINS"
+  wp --allow-root plugin activate "$WORDPRESS_ACTIVATE_PLUGINS"
 fi
 
 # Activate theme.
 if [ -n "$WORDPRESS_ACTIVATE_THEME" ]; then
-  wp theme activate "$WORDPRESS_ACTIVATE_THEME"
+  wp --allow-root theme activate "$WORDPRESS_ACTIVATE_THEME"
 fi
 
 # Setup PHPUnit.
