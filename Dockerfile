@@ -25,6 +25,7 @@ RUN curl -o wordpress-dev.tar.gz -SL https://github.com/WordPress/wordpress-deve
     && tar -xzf wordpress-dev.tar.gz  --strip-components 1 -C /tmp/wordpress/latest \
     && rm wordpress-dev.tar.gz
 
+# Use PHPUnit 5 until WordPress supports PHPUnit 6.
 RUN curl -sSL -o /usr/local/bin/phpunit "https://phar.phpunit.de/phpunit-5.0.phar" \
     && chmod +x /usr/local/bin/phpunit
 
@@ -35,10 +36,9 @@ RUN { \
     && chmod +x /usr/local/bin/tests
 
 RUN curl -sSL -o /usr/local/bin/wp "https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar" \
-    && chmod +x /usr/local/bin/wp
-
-RUN mkdir -p /etc/wp-cli && \
-    chown www-data:www-data /etc/wp-cli
+    && chmod +x /usr/local/bin/wp \
+    && mkdir -p /etc/wp-cli \
+    && chown www-data:www-data /etc/wp-cli
 
 RUN { \
       echo 'path: /var/www/html'; \
