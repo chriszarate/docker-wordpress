@@ -34,8 +34,7 @@ fi
 # MySQL may not be ready when container starts.
 set +ex
 while true; do
-  curl --fail --show-error --silent "${WORDPRESS_DB_HOST:-mysql}:3306" > /dev/null 2>&1
-  if [ $? -eq 0 ]; then break; fi
+  if curl --fail --show-error --silent "${WORDPRESS_DB_HOST:-mysql}:3306" > /dev/null 2>&1; then break; fi
   echo "Waiting for MySQL to be ready...."
   sleep 3
 done
