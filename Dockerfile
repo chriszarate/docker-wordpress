@@ -49,9 +49,6 @@ RUN { \
 
 RUN echo "export WP_CLI_CONFIG_PATH=/etc/wp-cli/config.yml" > /etc/profile.d/wp-cli.sh
 
-RUN curl -sSL "https://getcomposer.org/installer" | php \
-    && mv composer.phar /usr/local/bin/composer
-
 RUN { \
       echo '<IfModule mod_rewrite.c>'; \
       echo '  RewriteEngine On'; \
