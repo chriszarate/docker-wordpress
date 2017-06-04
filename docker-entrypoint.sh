@@ -44,6 +44,10 @@ $WORDPRESS_CONFIG_EXTRA
 PHP"
 fi
 
+# Make sure uploads directory exists and is writeable.
+chown www-data:www-data /var/www/html/wp-content
+runuser www-data -s /bin/sh -c "mkdir -p /var/www/html/wp-content/uploads"
+
 # MySQL may not be ready when container starts.
 set +ex
 while true; do
