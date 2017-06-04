@@ -111,4 +111,10 @@ volume at `/tmp/wordpress/init-wp-content`. Everything in that folder will be
 copied to your installation's `wp-content` folder.
 
 
+## Provide trusted root certificates
+
+Mount a folder of trusted root certificates to `/tmp/certs`. Any files in that
+folder with a `.crt` extension will be added to the trusted certificate store.
+
+
 [development]: https://github.com/chriszarate/docker-compose-wordpress
