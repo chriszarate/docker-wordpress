@@ -3,7 +3,7 @@
 set -ex
 
 # Copy WordPress core.
-if ! [ -e index.php ] && ! [ -e wp-includes/version.php ]; then
+if ! [ -e wp-includes/version.php ]; then
   tar cf - --one-file-system -C /usr/src/wordpress . | tar xf - --owner="$(id -u www-data)" --group="$(id -g www-data)"
   echo "WordPress has been successfully copied to $(pwd)"
 fi
