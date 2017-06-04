@@ -62,7 +62,8 @@ if [ -n "$WORDPRESS_ACTIVATE_PLUGINS" ]; then
     fi
   done
 
-  wp --allow-root plugin activate "$WORDPRESS_ACTIVATE_PLUGINS"
+  # shellcheck disable=SC2086
+  wp --allow-root plugin activate $WORDPRESS_ACTIVATE_PLUGINS
 fi
 
 # Activate theme. Install if it cannot be found locally.
