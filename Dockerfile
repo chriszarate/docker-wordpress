@@ -15,7 +15,7 @@ RUN { \
       echo 'xdebug.remote_port="9000"'; \
     } >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
-RUN a2enmod rewrite expires
+RUN a2enmod expires proxy proxy_http rewrite
 
 VOLUME /var/www/html
 
