@@ -1,8 +1,8 @@
 # WordPress development on Docker
 
 This image provides WordPress on PHP7. It is based on the official WordPress
-Docker image but adds WP-CLI, PHPUnit, Xdebug, and the WordPress unit testing
-suite.
+Docker image but adds WP-CLI and Xdebug, and provides an easy way to run
+WordPress unit tests with PHPUnit.
 
 ```
 docker pull chriszarate/wordpress
@@ -61,26 +61,13 @@ docker-compose exec --user www-data wordpress wp [command]
 
 ## Running tests (PHPUnit)
 
-Set `PHPUNIT_TEST_DIR` to the path containing `phpunit.xml` (again assuming you
-are running in the context of Docker Compose):
-
-```sh
-docker-compose exec wordpress tests
-```
-
-Other environment variables:
-
-- `PHPUNIT_DB_HOST`: Default "localhost".
-
-- `PHPUNIT_DB_NAME`: Default "wordpress_phpunit".
-
-- `PHPUNIT_DB_USER`: Default "root".
-
-- `PHPUNIT_DB_PASSWORD`: Default "".
-
-- `PHPUNIT_WP_CONTENT_LINKS`: A space-separated list of paths, relative to
-  `/var/www/html/wp-content/`, that should be symlinked into the WordPress unit
-  test suite directory so that they are available during testing.
+Previous versions of this image provided PHPUnit inside the container. However,
+bundling a single version of PHPUnit was not very flexible. Additionally, users
+did not have the opportunity to install their own test dependencies. I now
+provide a(n optional) separate PHPUnit WordPress container that provides much
+greater flexibility and isolation. Please see the README of my
+[Docker Compose WordPress development][development] repo for instructions on how
+to set this up.
 
 
 ## Xdebug

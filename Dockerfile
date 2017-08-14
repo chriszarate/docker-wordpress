@@ -19,22 +19,6 @@ RUN a2enmod expires proxy proxy_http rewrite
 
 VOLUME /var/www/html
 
-# Download WordPress testing suite.
-RUN curl -o wordpress-dev.tar.gz -SL https://github.com/WordPress/wordpress-develop/tarball/master \
-    && mkdir -p /tmp/wordpress/latest \
-    && tar -xzf wordpress-dev.tar.gz  --strip-components 1 -C /tmp/wordpress/latest \
-    && rm wordpress-dev.tar.gz
-
-# Use PHPUnit 5 until WordPress supports PHPUnit 6.
-RUN curl -sSL -o /usr/local/bin/phpunit "https://phar.phpunit.de/phpunit-5.0.phar" \
-    && chmod +x /usr/local/bin/phpunit
-
-RUN { \
-      echo '#!/usr/bin/env sh'; \
-      echo 'runuser -l www-data -s /bin/sh -c "cd $PHPUNIT_TEST_DIR; WP_ABSPATH=/tmp/wordpress/latest/src/ WP_TESTS_DIR=/tmp/wordpress/latest/tests/phpunit /usr/local/bin/phpunit $*"'; \
-    } > /usr/local/bin/tests \
-    && chmod +x /usr/local/bin/tests
-
 RUN curl -sSL -o /usr/local/bin/wp "https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar" \
     && chmod +x /usr/local/bin/wp \
     && mkdir -p /etc/wp-cli \
