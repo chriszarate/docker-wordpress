@@ -1,4 +1,4 @@
-FROM wordpress:4.8.1-php7.0-apache
+FROM wordpress:4.8.2-php7.0-apache
 
 RUN apt-get update \
     && apt-get install -y --force-yes --no-install-recommends less libxml2-dev \
