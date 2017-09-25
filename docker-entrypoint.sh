@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 set -ex
 
@@ -35,7 +35,7 @@ sed -i -E "s#^url: .*#url: ${WORDPRESS_SITE_URL:-http://project.dev}#" /etc/wp-c
 
 # Create WordPress config.
 if ! [ -f $ROOT_DIR/wp-config.php ]; then
-  runuser $WEB_USER -s /bin/sh -c "\
+  su - $WEB_USER -s /bin/sh -c "\
   wp config create \
     --dbhost=\"${WORDPRESS_DB_HOST:-mysql}\" \
     --dbname=\"${WORDPRESS_DB_NAME:-wordpress}\" \
@@ -44,7 +44,8 @@ if ! [ -f $ROOT_DIR/wp-config.php ]; then
     --skip-check \
     --extra-php <<PHP
 $WORDPRESS_CONFIG_EXTRA
-PHP"
+PHP
+"
 fi
 
 # Make sure uploads directory exists and is writeable.
@@ -62,8 +63,8 @@ done
 set -ex
 
 # Install WordPress.
-runuser $WEB_USER -s /bin/sh -c "\
-wp core $([ "$WORDPRESS_INSTALL_TYPE" == "multisite" ] && echo "multisite-install" || echo "install") \
+su - $WEB_USER -s /bin/sh -c "\
+wp core $([ "$WORDPRESS_INSTALL_TYPE" = "multisite" ] && echo "multisite-install" || echo "install") \
   --title=\"${WORDPRESS_SITE_TITLE:-Project}\" \
   --admin_user=\"${WORDPRESS_SITE_USER:-wordpress}\" \
   --admin_password=\"${WORDPRESS_SITE_PASSWORD:-wordpress}\" \
@@ -72,7 +73,7 @@ wp core $([ "$WORDPRESS_INSTALL_TYPE" == "multisite" ] && echo "multisite-instal
   --skip-email"
 
 # Update rewrite structure.
-runuser $WEB_USER -s /bin/sh -c "\
+su - $WEB_USER -s /bin/sh -c "\
 wp option update permalink_structure \"${WORDPRESS_PERMALINK_STRUCTURE:-/%year%/%monthnum%/%postname%/}\" \
   --skip-themes \
   --skip-plugins"
@@ -81,21 +82,21 @@ wp option update permalink_structure \"${WORDPRESS_PERMALINK_STRUCTURE:-/%year%/
 if [ -n "$WORDPRESS_ACTIVATE_PLUGINS" ]; then
   for plugin in $WORDPRESS_ACTIVATE_PLUGINS; do
     if ! [ -d "$ROOT_DIR/wp-content/plugins/$plugin" ]; then
-      runuser $WEB_USER -s /bin/sh -c "wp plugin install \"$plugin\""
+      su - $WEB_USER -s /bin/sh -c "wp plugin install \"$plugin\""
     fi
   done
 
   # shellcheck disable=SC2086
-  runuser $WEB_USER -s /bin/sh -c "wp plugin activate $WORDPRESS_ACTIVATE_PLUGINS"
+  su - $WEB_USER -s /bin/sh -c "wp plugin activate $WORDPRESS_ACTIVATE_PLUGINS"
 fi
 
 # Activate theme. Install if it cannot be found locally.
 if [ -n "$WORDPRESS_ACTIVATE_THEME" ]; then
   if ! [ -d "$ROOT_DIR/wp-content/themes/$WORDPRESS_ACTIVATE_THEME" ]; then
-    runuser $WEB_USER -s /bin/sh -c "wp theme install \"$WORDPRESS_ACTIVATE_THEME\""
+    su - $WEB_USER -s /bin/sh -c "wp theme install \"$WORDPRESS_ACTIVATE_THEME\""
   fi
 
-  runuser $WEB_USER -s /bin/sh -c "wp theme activate \"$WORDPRESS_ACTIVATE_THEME\""
+  su - $WEB_USER -s /bin/sh -c "wp theme activate \"$WORDPRESS_ACTIVATE_THEME\""
 fi
 
 exec "$@"
