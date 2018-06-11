@@ -1,4 +1,4 @@
-FROM wordpress:4.9.1-php7.0-apache
+FROM wordpress:4.9.6-php7.0-apache
 
 RUN apt-get update \
     && apt-get install -y --force-yes --no-install-recommends less libmemcached-dev libxml2-dev libz-dev \
