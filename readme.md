@@ -1,18 +1,10 @@
-# WordPress development on Docker
+# WordPress development on Docker [DEPRECATED]
 
-This image provides WordPress on PHP7. It is based on the official WordPress
-Docker image but adds WP-CLI and Xdebug, and provides an easy way to run
-WordPress unit tests with PHPUnit.
-
-```
-docker pull chriszarate/wordpress
-```
-
-Most likely, you will want to connect this image to a MySQL / MariaDB container
-and add your plugin or theme code, allowing you to connect to a development
-instance of WordPress in a browser. If that's the case, I can recommend my
+**NOTE:** This image is no longer updated. Unless you need Xdebug, I recommend
+that you work instead from the official WordPress images, as shown in my
 [Docker Compose WordPress development][development] repo.
 
+---
 
 ## Environment variables
 
