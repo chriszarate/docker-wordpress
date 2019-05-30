@@ -1,8 +1,15 @@
 # WordPress development on Docker [DEPRECATED]
 
-**NOTE:** This image is no longer updated. Unless you need Xdebug, I recommend
-that you work instead from the official WordPress images, as shown in my
-[Docker Compose WordPress development][development] repo.
+**NOTE:** This image is no longer updated. It was created when the official
+WordPress image was still young and had a number of issues that made local
+development frustrating. These issues have since been addressed.
+
+It can still be useful as an example of how to extend the official image and
+especially as an example of how to install Xdebug.
+
+In general, however, I recommend that you work instead from the official
+WordPress images, as shown in my [Docker Compose WordPress development][development]
+repo.
 
 ---
 
